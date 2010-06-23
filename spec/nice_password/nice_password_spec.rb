@@ -41,7 +41,7 @@ describe "Nice Password" do
     end
 
     it "should be able to specifiy number fo words" do
-      words = np.new(:word_count => 4, :length => 20)
+      words = np.new(:word_count => 4, :length => 20, :language => :en)
       words.scan(/\D+/).size.should == 4
     end
 

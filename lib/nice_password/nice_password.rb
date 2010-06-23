@@ -30,12 +30,12 @@ module NicePassword #:nodoc:
     # <tt>:digit_count</tt> - the number of digits between each word (not the total number), default is 2
     # <tt>:dictionary</tt> - for a custome dictionary you would like to use instead of the default
     def new( options = {} )
-      language = options[:language].to_s || 'en'
+      language = options[:language] || 'en'
       nice_pwd = ""
       password_length = options[:length] || 12
       word_count = options[:word_count] || 2
       digit_count = options[:digits] || 2
-      dictionary = options[:dictionary] || load_yaml(language)
+      dictionary = options[:dictionary] || load_yaml(language.to_s)
       word_length_variance = 3
 
       # Each word should be roughly the same size
