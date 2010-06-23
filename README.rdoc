@@ -23,13 +23,13 @@ To generate a password just call NicePassword.new
   NicePassword.new => basic34lesser
   
 Options that can be passed when creating a new NicePassword include:
-<tt>:password_length</tt> - total number of characters in the password, default is 12
-<tt>:language</tt> - language of the words used defaults to english
-<tt>:word_count</tt> - total number of words in the password, default is 2
-<tt>:digit_count</tt> - the number of digits between each word (not the total number), default is 2
-<tt>:dictionary</tt> - for a custom dictionary you would like to use instead of the default
+<tt>:password_length</tt> - total number of characters in the password, default is 12 <BR />
+<tt>:language</tt> - language of the words used defaults to english <BR />
+<tt>:word_count</tt> - total number of words in the password, default is 2 <BR />
+<tt>:digit_count</tt> - the number of digits between each word (not the total number), default is 2 <BR />
+<tt>:dictionary</tt> - for a custom dictionary you would like to use instead of the default <BR />
 
- NicePassword.new(:language => 'fr', :word_count => 3, :digit_count => 3, :length => 16)  => basic34lesser
+ NicePassword.new(:language => 'fr', :word_count => 3, :digit_count => 3, :length => 16)  => été86gris61rue
   
 == INFO
   
