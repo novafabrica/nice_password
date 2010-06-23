@@ -1,159 +1,43 @@
-= MakeExportable
+= NicePassword
 
-MakeExportable is a Rails gem/plugin that makes exporting your model's data effortless. It works in a variety of formats and can filter down what gets exported using ActiveRecord's find method.
+NicePassword creates an easy to remember but still somewhat secure and random passwords
+by taking common words from a "safe" dictionary and splicing them together with random numbers
+in between. The password is easier to remember than purely random strings of letters and numbers.
+NicePassword is intended for use whenever you need Rails to auto-generate a password for a user.
+Two possible uses would be after the user clicks on a "send me a new password" link or
+as a "suggested password" on a page that lets users input a new password.
 
-Supported Formats 
------------------
-At the moment MakeExportable supports
+Examples of NicePasswords:
+  campaign34bone
+  parent492wheat
+  orbit8low5mix
 
-* CSV: Comma-separated values
-* TSV: Tab-seperated values
-* XLS: Excel Spreadsheet
-* XML: Extensible markup language
-* HTML: Hypertext markup language
-* JSON: JavaScript Object Notation
-	
-INSTALLATION
--------------
+The Dictionary contains a list of words (English/Spanish/French only currently) which are reasonably safe
+for use in a corporate environment. For example, in addition to slang and obscene words,
+'kill' and 'hate' aren't listed.
+
+==Basic Usage
+
+To generate a password just call NicePassword.new
+
+  NicePassword.new => basic34lesser
   
-* gem - sudo gem install make_exportable
-* plugin - script/plugin install git@github.com:novafabrica/make_exportable.git
+Options that can be passed when creating a new NicePassword include:
+<tt>:password_length</tt> - total number of characters in the password, default is 12
+<tt>:language</tt> - language of the words used defaults to english
+<tt>:word_count</tt> - total number of words in the password, default is 2
+<tt>:digit_count</tt> - the number of digits between each word (not the total number), default is 2
+<tt>:dictionary</tt> - for a custom dictionary you would like to use instead of the default
 
-Usage
------
-
-To start using MakeExportable simply add a call to <em>make_exportable</em> in any class you want to use for exporting data.
-
-  class Customer < ActiveRecord::Base
-    make_exportable 
-  end
-
-This includes the MakeExportable module in your class and gives your class access to MakeExportable's methods. 
-
-You can specify which formats you want to use in your class using the :as option.
-
-  class Customer < ActiveRecord::Base
-    make_exportable :as => [:csv, xml]
-  end
-
-To export your model's data you can simply call the class method <em>to_export</em>
-
-  Customer.to_export("csv")
-
-<em>to_export</em> returns an array containing the data in CSV format and the appropriate mime-type for easy file sending.
-
-You can easily switch the format by substituting 'csv' for your desired format. 
-
-  Customer.to_export("xml", :only => ['first_name', 'last_name'])
-
-It also allows you to send finder options to the class. 
-
-  Customer.to_export("xml", :only => ['first_name', 'last_name'], :conditions => {:last_name => "smith"}, :order => "DESC")
-
-and can be attached to a scope on the Given Class
- 
-  Customer.recent.to_export(:csv)
- 
-<em>to_export</em> also allows scopes to be passed in as an array in the options hash
+ NicePassword.new(:language => 'fr', :word_count => 3, :digit_count => 3, :length => 16)  => basic34lesser
   
-  Customer.to_export(:csv, :scopes => ['recent'])
-
-MakeExportable doesn't just export database columns. It can also export data returned from methods.
-
-  class Customer < ActiveRecord::Base
-    make_exportable 
-
-    def full_name
-      "#{first_name} #{last_name}"
-    end
-    
-  end
-
-  Customer.to_export("csv", :only => ['full_name'])
-
-If you want an attribute to be handled differently when exported, you can define a method with the syntax <em>name_of_attribute_export</em> which will be called when exporting instead of the regular attribute.
-
-  class Customer < ActiveRecord::Base
-    make_exportable 
-
-    def first_name_export
-      first_name.capitalize
-    end
-
-  end
-
-
-If you just have some data (such as an array or hash) you want to export, MakeExportable can do that also with the <em>create_report_for</em> method
-
-  Customer.create_report_for("csv", [headers], [[row1], [row2], [row3]])
-
-Just send the format, the column headers and an ordered array of rows.
-Remember the row size and the header size need to be the same. 
-
-Defaults
-------------------
-
-If you have a general columns, scopes, and conditions you will be calling in multiple methods you can attach them to the <em>make_exportable</em> method as defaults when including it into your class. 
-
-* as - The acceptable formats to export as 
-* only & except - This defaults to all columns if no defaults are given
-* scopes - scopes to be used on the Class before exports
-
-For capatibility with Rails 2.3 we allow any option found in the find option at the moment. 
-This will be depricated in future version
-
-  class Customer < ActiveRecord::Base
-    make_exportable :finder_options => {:order => 'last_name ASC, first_name ASC', :conditions => {:active => true}}
-  end
-  
-  class Customer < ActiveRecord::Base
-    make_exportable :only => [:id, :username, :full_name]
-  end
-   
-  class Customer < ActiveRecord::Base
-    make_exportable :scopes => [:new_signups, :with_referals]
-  end
-  
-Magic Methods
-------------------
-  
-For ease of use MakeExportable dynamically adds a few useful methods. Each export format gets two "magic methods".
-
-<em>to_format_export</em>, where "format" is the export format (as in "to_csv_export").
-
-<em>create_format_report</em>), where "format" is the export format (as in "create_csv_report")
-
-Example
--------
-
-  class CustomerController < ApplicationController
-
-    def export
-      format = 'csv'
-      columns = ['first_name', 'last_name', 'city', 'state', 'email']
-      options = {:conditions => "active = 1"}
-      export_data, data_type = Customer.to_export(format, columns, options)
-
-      # Send data to user as file
-      file_name = "customer_export.#{format}"
-      send_data export_data, 
-      {
-        :type => data_type, 
-        :disposition => 'attachment', 
-        :filename => file_name 
-      }
-    end
-
-  end
-
-
 == INFO
   
-Author: Kevin Skoglund & Matthew Bergman, Nova Fabrica, Inc.
+Authors: Kevin Skoglund & Matthew Bergman, Nova Fabrica, Inc.
 
 License: Copyright 2010 by Kevin Skoglund. released under the attached MIT-LICENSE. 
 
-GitHub: http://github.com/Novafabrica/make_exportable/tree/master
+GitHub: http://github.com/Novafabrica/nice_password/tree/master
 
 BUG REPORTS & FEEDBACK
 ----------------------

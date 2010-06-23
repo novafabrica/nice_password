@@ -1,17 +1,6 @@
 require "yaml"
 module NicePassword #:nodoc:
 
-  def self.dictionaries
-    @@dictionaries
-  end
-
-  def self.dictionaries=(hash)
-    @@dictionaries = hash
-  end
-
-  dictionary_file = File.join(File.dirname(__FILE__), 'dictionaries.yml')
-  @@dictionaries = YAML::load( File.open(dictionary_file))
-
   # NicePassword creates an easy to remember but still somewhat secure and random passwords
   # by taking common words from a "safe" dictionary and splicing them together with random numbers
   # in between. The password is easier to remember than purely random strings of letters and numbers.
@@ -41,18 +30,19 @@ module NicePassword #:nodoc:
     # <tt>:digit_count</tt> - the number of digits between each word (not the total number), default is 2
     # <tt>:dictionary</tt> - for a custome dictionary you would like to use instead of the default
     def new( options = {} )
-      language = options[:language] || :en
+      language = options[:language].to_s || 'en'
       nice_pwd = ""
       password_length = options[:length] || 12
       word_count = options[:word_count] || 2
       digit_count = options[:digits] || 2
-      dictionary = options[:dictionary] || @@dictionaries[language]
+      dictionary = options[:dictionary] || load_yaml(language)
       word_length_variance = 3
 
       # Each word should be roughly the same size
       approx_word_length = (password_length - (digit_count * (word_count - 1))) / word_count
       # short_word_length allows for some variance
       short_word_length = [1, approx_word_length - word_length_variance].max
+      raise NicePassword::FormatError.new("Generation Ugly")  if password_length / word_count <= 2
 
       1.upto(word_count.to_i) do |word_num|
         remaining_length = password_length - nice_pwd.length
@@ -91,12 +81,20 @@ module NicePassword #:nodoc:
       return dictionary_word
     end
 
-    # pick_random_number chooses a random number with the number of digits defined by digit_count
-    def pick_random_number( digit_count = 1 )
-      semirandom_number = rand((10 ** digit_count) - 1)
-      semirandom_number += 1 if semirandom_number == 666 #would be unpleasant to receive...
-      return semirandom_number
-    end
+    private
+
+      def load_yaml(language)
+        YAML::load(File.open(File.join(File.dirname(__FILE__), 'dictionaries', language + ".yml")))
+      end
+
+      # pick_random_number chooses a random number with the number of digits defined by digit_count
+      def pick_random_number( digit_count = 1 )
+        min = 10 ** (digit_count - 1)
+        max = (10 ** digit_count ) - 1
+        semirandom_number = min + rand(max-min)
+        semirandom_number += 1 if semirandom_number == 666 #would be unpleasant to receive...
+        return semirandom_number
+      end
   end
 
 end

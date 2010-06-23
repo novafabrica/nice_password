@@ -2,6 +2,13 @@ require File.expand_path('../../spec_helper', __FILE__)
 describe "Nice Password" do
 
   np = NicePassword
+
+  it "should raise Format Error if word count exceeds a threshold for decent generation" do
+    lambda do
+      np.new(:word_count => 6)
+    end.should raise_error(NicePassword::FormatError)
+  end
+
   describe "defaults" do
 
     it "should have the length of 12" do
