@@ -6,3 +6,4 @@ require 'errors'
 
 $LOAD_PATH.shift
 
+NicePassword.load_default_dictionaries
