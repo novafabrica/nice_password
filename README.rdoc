@@ -7,8 +7,7 @@ Examples of NicePasswords:
   parent492wheat
   orbit8low5mix
 
-The dictionary contains a list of words (English/Spanish/French currently) which are reasonably safe
-for use in a corporate environment. For example, besides omitting slang and obscene words, words such as 'kill' and 'hate' are excluded.
+The dictionary contains a list of words which are reasonably safe for use in a corporate environment. For example, besides omitting obscene and slang words, words such as 'kill' and 'hate' are excluded.
 
 
 ==Usage
@@ -24,10 +23,26 @@ Options that can be passed when creating a new NicePassword include:
 * :words - total number of words, default is 2
 * :digits - number of digits between each word (not the total number), default is 2
 * :language - abbreviation for language to use for the words, default is 'en' (English)
-* :dictionary - specify a custom dictionary to use instead of the default dictionary
+* :dictionary - a custom dictionary (as an array) to use instead of the default dictionaries
 
- > NicePassword.new(:language => 'fr', :length => 16, :words => 3, :digits => 3)
- # => été826gris641rue
+  > NicePassword.new(:language => 'fr', :length => 16, :words => 3, :digits => 3)
+  # => été826gris641rue
+
+
+==Languages and Dictionaries
+
+The included dictionaries are:
+* English: 'en'
+* French: 'fr'
+* Spanish: 'sp'
+
+English is the default language.  You can set a different default language using:
+
+  NicePassword.default_language = 'fr'
+  
+Or you can choose a language on a case-by-case basis by passing in the language abbreviation as the value to the :language option (see Usage above).
+
+If you want to use your own dictionary (either with custom words or for another language), you just pass in an array of words as the value to the :dictionary option. You will want to make sure that your dictionary has several words of each length and includes single letters.
 
 
 ==Security

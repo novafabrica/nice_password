@@ -6,6 +6,10 @@ module NicePassword #:nodoc:
     @@languages = ['en', 'fr', 'sp']
     @@dictionaries = {}
 
+    @@default_language = 'en'
+    def default_language; @@default_language; end
+    def default_language=(value); @@default_language = value; end
+
     # <tt>new</tt> generates a new NicePassword according to the parameters passed 
     # in via the options hash, or using the default parameters.
     #
@@ -59,8 +63,11 @@ module NicePassword #:nodoc:
     def pick_dictionary_word(options={})
       min_length = (options[:exact] || options[:min] || 1).to_i
       max_length = (options[:exact] || options[:max] || 5).to_i
-      language   = (options[:language] || 'en').to_s
+      language   = (options[:language] || @@default_language).to_s
       dictionary = options[:dictionary] || @@dictionaries[language]
+      
+      # TODO: ensure that language is a valid choice
+      # TODO: raise an error if user provides a broken dictionary
       
       sized_words = dictionary.select do |word|
         min_length <= word.length && word.length <= max_length
@@ -84,7 +91,8 @@ module NicePassword #:nodoc:
       # <tt>load_dictionary</tt> load the YAML dictionary file for the given language
       # The language should be a two letter abbreviation that corresponds to the file 
       # name in /lib/nice_password/dictionaries/*.yml such as 'en', 'fr', 'sp'.
-      def load_dictionary(lang="en")
+      def load_dictionary(lang)
+        return false unless lang
         dictionary = File.join(File.dirname(__FILE__), 'dictionaries', "#{lang}.yml")
         YAML::load(File.open(dictionary))
       end
