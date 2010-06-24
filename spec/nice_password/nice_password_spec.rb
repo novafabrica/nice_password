@@ -29,18 +29,28 @@ describe "Nice Password" do
   describe "options" do
 
     it "should be able to specify length" do
-      NicePassword.new(:length => 20).length.should == 20
+      (6..20).each do |n|
+        NicePassword.new(:length => n).length.should == n
+      end
     end
 
     it "should be able to specify number of digits" do
-      digits = NicePassword.new(:digits => 8).scan(/\d+/)
-      digits.join("").size.should == 8
+      (1..5).each do |n|
+        digits = NicePassword.new(:digits => n).scan(/\d+/)
+        digits.join("").size.should == n
+      end
     end
 
     it "should be able to specify number of words" do
-      words = NicePassword.new(:words => 4, :length => 20, :language => :en)
-      words.scan(/\D+/).size.should == 4
+      (1..3).each do |n|
+        words = NicePassword.new(:words => n)
+        words.scan(/\D+/).size.should == n
+      end
     end
+    
+    it "should be able to specify the language"
+    
+    it "should be able to send an alternate dictionary"
 
   end
 

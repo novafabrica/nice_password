@@ -30,6 +30,8 @@ module NicePassword #:nodoc:
       
       total_digits = digit_length * (word_count - 1)
       avg_word_length = (total_length - total_digits) / word_count
+      
+      # TODO: do we need other validations like this one?
       raise NicePassword::FormatError.new("Word count is too high") if total_length / word_count <= 2
 
       word_count.downto(1) do |n|
