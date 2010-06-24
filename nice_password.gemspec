@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kevin Skoglund", "Matthew Bergman"]
-  s.date = %q{2010-06-22}
-  s.description = %q{TODO.}
-  s.email = %q{kevin@novafabirca.com}
+  s.date = %q{2010-06-24}
+  s.description = %q{NicePassword creates easy-to-remember, reasonably-secure passwords by mixing dictionary words and random numbers.}
+  s.email = %q{kevin@novafabrica.com}
   s.extra_rdoc_files = [
     "README.rdoc"
   ]
@@ -31,11 +31,11 @@ Gem::Specification.new do |s|
      "spec/nice_password/nice_password_spec.rb",
      "spec/spec_helper.rb"
   ]
-  s.homepage = %q{http://github.com/Novafabrica/nice-password}
+  s.homepage = %q{http://github.com/novafabrica/nice_password}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{effortless password generation}
+  s.summary = %q{Generate easy to read/remember passwords}
   s.test_files = [
     "spec/nice_password/nice_password_spec.rb",
      "spec/spec_helper.rb"

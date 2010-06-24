@@ -45,10 +45,10 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
     gemspec.name = "nice_password"
-    gemspec.summary = "effortless password generation"
-    gemspec.description = "TODO."
-    gemspec.email = "kevin@novafabirca.com"
-    gemspec.homepage = "http://github.com/Novafabrica/nice-password"
+    gemspec.summary = "Generate easy to read/remember passwords"
+    gemspec.description = "NicePassword creates easy-to-remember, reasonably-secure passwords by mixing dictionary words and random numbers."
+    gemspec.email = "kevin@novafabrica.com"
+    gemspec.homepage = "http://github.com/novafabrica/nice_password"
     gemspec.authors = ["Kevin Skoglund", "Matthew Bergman"]
     gemspec.files =  FileList["[A-Z]*", "{generators,lib,spec,rails}/**/*"] - FileList["**/*.log"]
   end
