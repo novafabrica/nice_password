@@ -1,49 +1,60 @@
-= NicePassword
+=NicePassword
 
-NicePassword creates an easy to remember but still somewhat secure and random passwords
-by taking common words from a "safe" dictionary and splicing them together with random numbers
-in between. The password is easier to remember than purely random strings of letters and numbers.
-NicePassword is intended for use whenever you need Rails to auto-generate a password for a user.
-Two possible uses would be after the user clicks on a "send me a new password" link or
-as a "suggested password" on a page that lets users input a new password.
+NicePassword creates easy-to-remember but still somewhat secure passwords by mixing common words from a "safe" dictionary with random numbers. The password is easier to read and to remember than purely random strings of letters and numbers, making it "nicer" on users.  NicePassword is ideal whenever you need Rails to auto-generate a password for a user--such as after the user clicks a "send me a new password" link or as a "suggested password" on a password edit page.
 
 Examples of NicePasswords:
   campaign34bone
   parent492wheat
   orbit8low5mix
 
-The Dictionary contains a list of words (English/Spanish/French only currently) which are reasonably safe
-for use in a corporate environment. For example, in addition to slang and obscene words,
-'kill' and 'hate' aren't listed.
+The dictionary contains a list of words (English/Spanish/French currently) which are reasonably safe
+for use in a corporate environment. For example, besides omitting slang and obscene words, words such as 'kill' and 'hate' are excluded.
 
-==Basic Usage
 
-To generate a password just call NicePassword.new
+==Usage
 
-  NicePassword.new => basic34lesser
-  
+To generate a password just call NicePassword.new.
+
+  > NicePassword.new
+  # => basic34lesser
+
 Options that can be passed when creating a new NicePassword include:
 
-* <tt>:password_length</tt> - total number of characters in the password, default is 12
-* <tt>:language</tt> - language of the words used defaults to english
-* <tt>:word_count</tt> - total number of words in the password, default is 2
-* <tt>:digit_count</tt> - the number of digits between each word (not the total number), default is 2
-* <tt>:dictionary</tt> - for a custom dictionary you would like to use instead of the default
+* :length - total number of characters, default is 12
+* :words - total number of words, default is 2
+* :digits - number of digits between each word (not the total number), default is 2
+* :language - abbreviation for language to use for the words, default is 'en' (English)
+* :dictionary - specify a custom dictionary to use instead of the default dictionary
 
- NicePassword.new(:language => 'fr', :word_count => 3, :digit_count => 3, :length => 16)  => été86gris61rue
-  
-== INFO
+ > NicePassword.new(:language => 'fr', :length => 16, :words => 3, :digits => 3)
+ # => été826gris641rue
+
+
+==Security
+
+NicePassword passwords are not as secure as a random string would be--that is obvious.  However, they are much more secure than the passwords most users pick on their own.
+
+Random strings are hard to remember, easy to mistype and increase the likelihood that a user will switch to a very weak password at the first opportunity.  Because NicePasswords are much easy to remember, a user is more likely to keep them.  If they still opt to switch to a stronger or weaker password, then you are no worse off, but provided a better user experience.
+
+The inclusion of digits between the dictionary words is intended to make a brute force dictionary attack much harder. Increasing the number of digits between words, or the number of words with digits between them, will increase the security strength of the password.
+
+
+==Info
   
 Authors: Kevin Skoglund & Matthew Bergman, Nova Fabrica, Inc.
 
 License: Copyright 2010 by Kevin Skoglund. released under the attached MIT-LICENSE. 
 
-GitHub: http://github.com/Novafabrica/nice_password/tree/master
+GitHub: http://github.com/novafabrica/nice_password/tree/master
 
-BUG REPORTS & FEEDBACK
-----------------------
-Bug reports and feedback are welcomed at info@novafabrica.com
 
-Warranty
---------
+==Bug Reports and Feedback
+
+Bug reports should be submitted at https://github.com/novafabrica/nice_password/issues
+
+Other feedback is welcomed at info@novafabrica.com
+
+
+==Warranty
+
 This software is provided "as is" and without any express or implied warranties, including, without limitation, the implied warranties of merchantability and fitness for a particular purpose.
