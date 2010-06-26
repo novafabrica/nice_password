@@ -42,7 +42,7 @@ describe "Nice Password" do
     end
 
     it "should be able to specify number of words" do
-      (1..3).each do |n|
+      (2..4).each do |n|
         words = NicePassword.new(:words => n)
         words.scan(/\D+/).size.should == n
       end

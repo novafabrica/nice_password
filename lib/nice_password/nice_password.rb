@@ -4,9 +4,8 @@ module NicePassword #:nodoc:
   class << self
 
     @@languages = ['en', 'fr', 'sp']
-    @@dictionaries = {}
-
     @@default_language = 'en'
+    
     def default_language; @@default_language; end
     def default_language=(value); @@default_language = value; end
 
@@ -21,18 +20,21 @@ module NicePassword #:nodoc:
     #   :dictionary - specify a custom dictionary to use instead of the default dictionary
     #
     def new(options= {})
-      password        = ""
-      total_length    = (options[:length] || 12).to_i
-      word_count      = (options[:words]  ||  2).to_i
-      digit_length    = (options[:digits] ||  2).to_i
-      word_options    = options.slice(:language, :dictionary)
-      length_variance = 3
+      password                       = ""
+      total_length                   = (options[:length] || 12).to_i
+      word_count                     = (options[:words]  ||  2).to_i
+      digit_length                   = (options[:digits] ||  2).to_i
+      word_options                   = {}
+      word_options[:language]        = options[:language] || self.default_language
+      word_options[:dictionary]      = options[:dictionary] || load_dictionary(word_options[:language])
+      length_variance                = 3
       
       total_digits = digit_length * (word_count - 1)
       avg_word_length = (total_length - total_digits) / word_count
       
       # TODO: do we need other validations like this one?
       raise NicePassword::FormatError.new("Word count is too high") if total_length / word_count <= 2
+      raise NicePassword::FormatError.new("Word length is too long") if total_length / word_count >= 12
 
       word_count.downto(1) do |n|
         length_needed = total_length - password.length
@@ -79,12 +81,6 @@ module NicePassword #:nodoc:
       else
         # TODO: How should an empty sized_words be handled?
         return ""
-      end
-    end
-
-    def load_default_dictionaries
-      @@languages.each do |lang|
-        @@dictionaries[lang] = load_dictionary(lang) rescue nil
       end
     end
     
