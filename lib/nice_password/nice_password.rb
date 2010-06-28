@@ -15,7 +15,7 @@ module NicePassword #:nodoc:
     #
     # Options include:
     #   :length - total number of characters in the password, default is 12
-    #   :words - total number of words in the password, default is 2
+    #   :words - total number of words in the password, between 1-4, default is 2
     #   :digits - number of digits between each word (not the total number), default is 2
     #   :language - abbreviation for language to use for the words, default is 'en' (English)
     #   :dictionary - specify a custom dictionary to use instead of the default dictionary
@@ -28,12 +28,12 @@ module NicePassword #:nodoc:
       word_options    = options.slice(:language, :dictionary)
       length_variance = 3
       
+      validate_word_count(word_count)
+      
       total_digits = digit_length * (word_count - 1)
       avg_word_length = (total_length - total_digits) / word_count
       
-      # TODO: do we need other validations like this one?
-      raise NicePassword::FormatError.new("Word count is too high") if total_length / word_count <= 2
-      raise NicePassword::FormatError.new("Word length is too long") if total_length / word_count >= 12
+      validate_avg_word_length(avg_word_length)
 
       word_count.downto(1) do |n|
         length_needed = total_length - password.length
@@ -107,6 +107,16 @@ module NicePassword #:nodoc:
     
     private
     
+      def validate_word_count(word_count)
+        raise NicePassword::FormatError.new("Word count must be greater than 0") if word_count < 1
+        raise NicePassword::FormatError.new("Word count must be less than 4") if word_count > 4
+      end
+      
+      def validate_avg_word_length(avg_word_length)
+        raise NicePassword::FormatError.new("Word length is too short, increase :length") if avg_word_length <= 2
+        raise NicePassword::FormatError.new("Word length is too long, decrease :length") if avg_word_length >= 12
+      end
+      
       def validate_language(language)
         unless @@languages.include?(language)
           raise NicePassword::DictionaryError.new("Invalid language")

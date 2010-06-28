@@ -2,12 +2,6 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Nice Password" do
 
-  it "should raise Format Error if word count exceeds a threshold for decent generation" do
-    lambda do
-      NicePassword.new(:words => 6)
-    end.should raise_error(NicePassword::FormatError)
-  end
-
   describe "defaults" do
 
     it "should have the length of 12" do
@@ -29,7 +23,7 @@ describe "Nice Password" do
   describe "options" do
 
     it "should be able to specify length" do
-      (6..20).each do |n|
+      (8..24).each do |n|
         password = NicePassword.new(:length => n)
         password.length.should == n
       end
@@ -44,13 +38,27 @@ describe "Nice Password" do
 
     it "should be able to specify number of words" do
       (2..4).each do |n|
-        password = NicePassword.new(:words => n)
+        # :length increases :words to avoid validation errors
+        password = NicePassword.new(:words => n, :length => n * 5)
         password.scan(/\D+/).size.should == n
       end
     end
     
-    it "should be able to specify the language" do
+    it "should be able to specify the language as a string" do
       ['en', 'fr', 'sp'].each do |lang|
+        yaml_file = File.join(File.dirname(__FILE__), '..', '..', 'lib', 'nice_password', 'dictionaries', "#{lang}.yml")
+        dictionary = YAML::load(File.open(yaml_file))
+        
+        password = NicePassword.new(:language => lang)
+        password.scan(/\D+/).each do |word|
+          dictionary.include?(word).should be_true
+        end
+      end
+      
+    end
+    
+    it "should be able to specify the language as a symbol" do
+      [:en, :fr, :sp].each do |lang|
         yaml_file = File.join(File.dirname(__FILE__), '..', '..', 'lib', 'nice_password', 'dictionaries', "#{lang}.yml")
         dictionary = YAML::load(File.open(yaml_file))
         
@@ -78,4 +86,50 @@ describe "Nice Password" do
 
   end
 
+  describe "validations" do
+    
+    it "should raise FormatError if avg word count is too small" do
+      lambda do
+        NicePassword.new(:length => 6, :words => 0, :digits => 2)
+      end.should raise_error(NicePassword::FormatError)
+    end
+
+    it "should raise FormatError if avg word count is too large" do
+      lambda do
+        NicePassword.new(:length => 6, :words => 5, :digits => 2)
+      end.should raise_error(NicePassword::FormatError)
+    end
+
+    it "should raise FormatError if avg word length is too small" do
+      lambda do
+        NicePassword.new(:length => 6, :words => 2, :digits => 2)
+      end.should raise_error(NicePassword::FormatError)
+    end
+
+    it "should raise FormatError if avg word length is too large" do
+      lambda do
+        NicePassword.new(:length => 26, :words => 2, :digits => 2)
+      end.should raise_error(NicePassword::FormatError)
+    end
+
+    it 'should raise DictionaryError if language is an invalid choice' do
+      lambda do
+        NicePassword.new(:language => 'martian')
+      end.should raise_error(NicePassword::DictionaryError)
+    end
+    
+    it 'should raise DictionaryError if dictionary is invalid'   do
+      lambda do
+        NicePassword.new(:dictionary => {})
+      end.should raise_error(NicePassword::DictionaryError)
+      lambda do
+        NicePassword.new(:dictionary => [])
+      end.should raise_error(NicePassword::DictionaryError)
+      lambda do
+        NicePassword.new(:dictionary => [nil, nil, nil])
+      end.should raise_error(NicePassword::DictionaryError)
+    end
+    
+  end
+  
 end

@@ -20,7 +20,7 @@ To generate a password just call NicePassword.new.
 Options that can be passed when creating a new NicePassword include:
 
 * :length - total number of characters, default is 12
-* :words - total number of words, default is 2
+* :words - total number of words, between 1-4, default is 2
 * :digits - number of digits between each word (not the total number), default is 2
 * :language - abbreviation for language to use for the words, default is 'en' (English)
 * :dictionary - a custom dictionary (as an array) to use instead of the default dictionaries
