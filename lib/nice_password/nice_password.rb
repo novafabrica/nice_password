@@ -77,12 +77,13 @@ module NicePassword #:nodoc:
       def pick_dictionary_word(options={})
         min_length = (options[:exact] || options[:min] || 1).to_i
         max_length = (options[:exact] || options[:max] || 5).to_i
+        
         language   = (options[:language] || @@default_language).to_s
+        validate_language(language)
+        
         dictionary = options[:dictionary] || @@dictionaries[language] ||= load_dictionary(language)
-      
-        # TODO: ensure that language is a valid choice
-        # TODO: raise an error if user provides a broken dictionary
-      
+        validate_dictionary(dictionary)
+        
         sized_words = dictionary.select do |word|
           min_length <= word.length && word.length <= max_length
         end
@@ -102,6 +103,20 @@ module NicePassword #:nodoc:
         semirandom = min + rand(max-min)
         semirandom += 1 if semirandom == 666 #would be unpleasant to receive...
         return semirandom
+      end
+    
+    private
+    
+      def validate_language(language)
+        unless @@languages.include?(language)
+          raise NicePassword::DictionaryError.new("Invalid language")
+        end
+      end
+      
+      def validate_dictionary(dictionary)
+        unless dictionary.is_a?(Array) && !dictionary.compact.empty?
+          raise NicePassword::DictionaryError.new("Invalid dictionary format")
+        end
       end
       
   end
