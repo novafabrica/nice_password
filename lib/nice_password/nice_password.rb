@@ -3,7 +3,7 @@ module NicePassword #:nodoc:
 
   class << self
 
-    @@languages = ['en', 'fr', 'sp']
+    @@languages = ['en', 'fr', 'es']
     @@default_language = 'en'
     @@dictionaries = {}
     
@@ -57,7 +57,7 @@ module NicePassword #:nodoc:
     
       # <tt>load_dictionary</tt> load the YAML dictionary file for the given language
       # The language should be a two letter abbreviation that corresponds to the file 
-      # name in /lib/nice_password/dictionaries/*.yml such as 'en', 'fr', 'sp'.
+      # name in /lib/nice_password/dictionaries/*.yml such as 'en', 'fr', 'es'.
       def load_dictionary(lang)
         return false unless lang
         dictionary = File.join(File.dirname(__FILE__), 'dictionaries', "#{lang}.yml")

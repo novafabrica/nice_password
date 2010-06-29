@@ -45,7 +45,7 @@ describe "Nice Password" do
     end
     
     it "should be able to specify the language as a string" do
-      ['en', 'fr', 'sp'].each do |lang|
+      ['en', 'fr', 'es'].each do |lang|
         yaml_file = File.join(File.dirname(__FILE__), '..', '..', 'lib', 'nice_password', 'dictionaries', "#{lang}.yml")
         dictionary = YAML::load(File.open(yaml_file))
         
@@ -58,7 +58,7 @@ describe "Nice Password" do
     end
     
     it "should be able to specify the language as a symbol" do
-      [:en, :fr, :sp].each do |lang|
+      [:en, :fr, :es].each do |lang|
         yaml_file = File.join(File.dirname(__FILE__), '..', '..', 'lib', 'nice_password', 'dictionaries', "#{lang}.yml")
         dictionary = YAML::load(File.open(yaml_file))
         

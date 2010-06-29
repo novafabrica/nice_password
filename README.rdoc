@@ -34,7 +34,7 @@ Options that can be passed when creating a new NicePassword include:
 The included dictionaries are:
 * English: 'en'
 * French: 'fr'
-* Spanish: 'sp'
+* Spanish: 'es'
 
 English is the default language.  You can set a different default language using:
 
