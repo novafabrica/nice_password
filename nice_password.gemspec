@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kevin Skoglund", "Matthew Bergman"]
-  s.date = %q{2010-06-24}
+  s.date = %q{2010-07-06}
   s.description = %q{NicePassword creates easy-to-remember, reasonably-secure passwords by mixing dictionary words and random numbers.}
   s.email = %q{kevin@novafabrica.com}
   s.extra_rdoc_files = [
@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "lib/nice_password.rb",
+     "lib/nice_password/core_ext.rb",
      "lib/nice_password/dictionaries/en.yml",
      "lib/nice_password/dictionaries/fr.yml",
      "lib/nice_password/dictionaries/sp.yml",
